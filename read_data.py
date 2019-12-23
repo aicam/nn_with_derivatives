@@ -1,13 +1,15 @@
+import random
 def get_file_array(path):
     f = open(path)
-    x0_arr = []
-    x1_arr = []
+    X = []
     y_arr = []
     for l in f:
 
 
 
-        x0_arr.append(l.split(',')[0])
-        x1_arr.append(l.split(',')[1])
-        y_arr.append(l.split(',')[2])
-    return x0_arr, x1_arr, y_arr
+        X.append([float(l.split(',')[0]), float(l.split(',')[1])])
+        y_arr.append(int(l.split(',')[2]))
+    z = list(zip(X,y_arr))
+    random.shuffle(z)
+    X, y_arr = zip(*z)
+    return X, y_arr
