@@ -1,11 +1,7 @@
-from sympy import *
 import numpy as np
-import math
 from read_data import get_file_array
 def sigmoid(x):
     return 1/(1 + np.exp(-x))
-
-
 
 def dy_dw(x,w,b):
     wx_plus_b = w*x + b
@@ -26,19 +22,10 @@ X, y_array = get_file_array('./data/data.csv')
 W = [np.random.rand(),np.random.rand()]
 b = np.random.rand()
 
-
-
-COST = math.inf
-
-
 n_epoch = 50
 lr = 0.01
 train = 150
 test = 50
-
-
-
-
 
 for i in range(n_epoch):
     grad = np.zeros([len(W)])
@@ -55,9 +42,3 @@ for i in range(train, train + test):
     y = calculate_y(W,X[i],b)
     lost += not np.logical_xor(y,y_array[i])
 print(lost)
-
-
-
-
-
-
