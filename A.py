@@ -3,7 +3,10 @@ from read_data import get_file_array
 def sigmoid(x):
     return 1/(1 + np.exp(-x))
 
-def dy_dw(x,w,b):
+
+
+
+def dy_dall(x, w, b):
     wx_plus_b = w*x + b
     return x*sigmoid(wx_plus_b)*(1 - sigmoid(wx_plus_b))
 
@@ -33,7 +36,7 @@ for i in range(n_epoch):
         for j in range(train):
             y = calculate_y(W,X[j],b)
             cost = calculate_cost(y_array[j], y)
-            dcost_dw = (y - y_array[j])*dy_dw(W[r],X[j][r], b)
+            dcost_dw = (y - y_array[j]) * dy_dall(W[r], X[j][r], b)
             grad[r] += dcost_dw
     for r in range(len(W)):
         W[r] = W[r] - lr*grad[r]
