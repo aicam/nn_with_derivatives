@@ -11,9 +11,10 @@ def dy_dall(x, w, b):
     return x*sigmoid(wx_plus_b)*(1 - sigmoid(wx_plus_b))
 
 def calculate_y(W,X,b):
-    W = np.array(W)
-    X = np.array(X)
-    W.reshape([2,1])
+    w2 = np.array(W)
+    x2 = np.array(X)
+    w2.reshape([2,1])
+    np.matmul(x2, w2) + b
     return np.matmul(X,W) + b
 
 def calculate_cost(y, y_prim):
