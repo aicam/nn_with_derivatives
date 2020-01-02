@@ -1,5 +1,7 @@
 from read_data import get_file_array
 import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib
 
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
@@ -30,7 +32,7 @@ W = [np.random.rand(), np.random.rand()]
 b = np.random.rand()
 
 n_epoch = 50
-lr = 0.01
+# lr = 0.01
 train = 150
 test = 50
 
@@ -50,7 +52,7 @@ W = [np.random.rand(), np.random.rand()]
 V = [np.random.rand(), np.random.rand()]
 U = [np.random.rand(), np.random.rand()]
 B = [np.random.rand(), np.random.rand(), np.random.rand()]
-def B_training():
+def B_training(lr):
     for i in range(n_epoch):
         grad_w = np.zeros([len(W)])
         grad_v = np.zeros([len(V)])
@@ -80,5 +82,14 @@ def B_training():
     lost = 0
     for i in range(train, train + test):
         y = calculate_y0(X[i], W, V, U, B)
-        lost += not np.logical_xor(y, y_array[i])
+        lost += 1 if np.abs(y - y_array[i]) > 0.5 else 0
     return lost
+epoch_array = [i*0.001 for i in range(50)]
+result = [B_training(item) for item in epoch_array]
+fig, ax = plt.subplots()
+ax.plot(epoch_array, result)
+ax.set(xlabel='lr', ylabel='lost', title='NN A result with different lr')
+ax.grid()
+fig.savefig('B_lr(0001-005)')
+plt.show()
+print(np.mean(result))
