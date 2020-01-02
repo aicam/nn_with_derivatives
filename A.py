@@ -1,5 +1,8 @@
 import numpy as np
 from read_data import get_file_array
+import matplotlib.pyplot as plt
+import matplotlib
+
 def sigmoid(x):
     return 1/(1 + np.exp(-x))
 
@@ -26,23 +29,33 @@ X, y_array = get_file_array('./data/data.csv')
 W = [np.random.rand(),np.random.rand()]
 b = np.random.rand()
 
+
+train = 100
+test = 100
 n_epoch = 50
 lr = 0.01
-train = 150
-test = 50
-
-for i in range(n_epoch):
-    grad = np.zeros([len(W)])
-    for r in range(len(W)):
-        for j in range(train):
-            y = calculate_y(W,X[j],b)
-            cost = calculate_cost(y_array[j], y)
-            dcost_dw = (y - y_array[j]) * dy_dall(W[r], X[j][r], b)
-            grad[r] += dcost_dw
-    for r in range(len(W)):
-        W[r] = W[r] - lr*grad[r]
-lost = 0
-for i in range(train, train + test):
-    y = calculate_y(W,X[i],b)
-    lost += not np.logical_xor(y,y_array[i])
-print(lost)
+def A_training():
+    for i in range(n_epoch):
+        grad = np.zeros([len(W)])
+        for r in range(len(W)):
+            for j in range(train):
+                y = calculate_y(W,X[j],b)
+                cost = calculate_cost(y_array[j], y)
+                dcost_dw = (y - y_array[j]) * dy_dall(W[r], X[j][r], b)
+                grad[r] += dcost_dw
+        for r in range(len(W)):
+            W[r] = W[r] - lr*grad[r]
+    lost = 0
+    for i in range(train, train + test):
+        y = calculate_y(W,X[i],b)
+        lost += 1 if np.abs(y - y_array[i]) > 0.5 else 0
+    return lost
+epoch_array = [i*0.01 for i in range(100)]
+result = [A_training() for item in epoch_array]
+fig, ax = plt.subplots()
+ax.plot(epoch_array, result)
+ax.set(xlabel='lr', ylabel='lost', title='NN A result with different lr')
+ax.grid()
+fig.savefig('A_train-100_test-100')
+plt.show()
+print(np.mean(result))

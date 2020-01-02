@@ -1,7 +1,6 @@
 from read_data import get_file_array
 import numpy as np
 
-
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
@@ -51,34 +50,35 @@ W = [np.random.rand(), np.random.rand()]
 V = [np.random.rand(), np.random.rand()]
 U = [np.random.rand(), np.random.rand()]
 B = [np.random.rand(), np.random.rand(), np.random.rand()]
-for i in range(n_epoch):
-    grad_w = np.zeros([len(W)])
-    grad_v = np.zeros([len(V)])
-    grad_u = np.zeros([len(U)])
-    for r1 in range(len(U)):
-        for r2 in range(len(W)):
-            for r3 in range(len(V)):
-                for j in range(train):
-                    y0 = calculate_y0(X[j], W, V, U, B)
-                    cost = calculate_cost(y_array[j], y0)
-                    # calculate_y is also used to calculate WX+b0
-                    dcost_du = (y0 - y_array[j]) * dy_dall(calculate_y(W, X[j], B[0]), U[r1], B[0])
+def B_training():
+    for i in range(n_epoch):
+        grad_w = np.zeros([len(W)])
+        grad_v = np.zeros([len(V)])
+        grad_u = np.zeros([len(U)])
+        for r1 in range(len(U)):
+            for r2 in range(len(W)):
+                for r3 in range(len(V)):
+                    for j in range(train):
+                        y0 = calculate_y0(X[j], W, V, U, B)
+                        cost = calculate_cost(y_array[j], y0)
+                        # calculate_y is also used to calculate WX+b0
+                        dcost_du = (y0 - y_array[j]) * dy_dall(calculate_y(W, X[j], B[0]), U[r1], B[0])
 
-                    grad_u[r1] += dcost_du/3
-                    dcost_dw = (y0 - y_array[j]) * dy_dall(calculate_y(W, X[j], B[0]), U[r1], B[0]) * dy_dall(X[j][r2], W[r2],
-                                                                                                        B[0])
-                    grad_w[r2] += dcost_dw/3
-                    dcost_dv = (y0 - y_array[j]) * dy_dall(calculate_y(V, X[j], B[0]), U[r1], B[0]) * dy_dall(X[j][r3], V[r3],
-                                                                                                        B[1])
-                    grad_v[r3] += dcost_dv/3
-    for r1 in range(len(U)):
-        U[r1] = U[r1] - lr * grad_u[r1]
-    for r1 in range(len(V)):
-        V[r1] = V[r1] - lr * grad_v[r1]
-    for r1 in range(len(W)):
-        W[r1] = W[r1] - lr * grad_w[r1]
-lost = 0
-for i in range(train, train + test):
-    y = calculate_y0(X[i], W, V, U, B)
-    lost += not np.logical_xor(y, y_array[i])
-print(lost)
+                        grad_u[r1] += dcost_du/3
+                        dcost_dw = (y0 - y_array[j]) * dy_dall(calculate_y(W, X[j], B[0]), U[r1], B[0]) * dy_dall(X[j][r2], W[r2],
+                                                                                                            B[0])
+                        grad_w[r2] += dcost_dw/3
+                        dcost_dv = (y0 - y_array[j]) * dy_dall(calculate_y(V, X[j], B[0]), U[r1], B[0]) * dy_dall(X[j][r3], V[r3],
+                                                                                                            B[1])
+                        grad_v[r3] += dcost_dv/3
+        for r1 in range(len(U)):
+            U[r1] = U[r1] - lr * grad_u[r1]
+        for r1 in range(len(V)):
+            V[r1] = V[r1] - lr * grad_v[r1]
+        for r1 in range(len(W)):
+            W[r1] = W[r1] - lr * grad_w[r1]
+    lost = 0
+    for i in range(train, train + test):
+        y = calculate_y0(X[i], W, V, U, B)
+        lost += not np.logical_xor(y, y_array[i])
+    return lost
